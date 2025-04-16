@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap Ciberpunk de Ciberseguridad</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Share+Tech+Mono&display=swap');
+        
+        :root {
+            /* Colores mate para estilo ciberpunk */
+            --matte-blue: #39869c;
+            --matte-purple: #7d4e89;
+            --matte-green: #3c725a;
+            --matte-pink: #9c4667;
+            --matte-yellow: #8c7e3d;
+            --dark-bg: #15151f;
+            --darker-bg: #0d0d15;
+            --grid-color: rgba(57, 134, 156, 0.07);
+        }
+        
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            line-height: 1.6;
+            color: #c8c8d0;
+            margin: 0;
+            padding: 0;
+            background-color: var(--dark-bg);
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(21, 21, 31, 0.5) 0%, rgba(13, 13, 21, 0.95) 100%);
+            z-index: -1;
+        }
+        
+        .header-container {
+            background: linear-gradient(135deg, rgba(21, 21, 31, 0.8) 0%, rgba(13, 13, 21, 0.9) 100%);
+            border-bottom: 1px solid var(--matte-blue);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            color: #e0e0e8;
+            margin: 0;
+            padding: 20px 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 3px rgba(57, 134, 156, 0.5);
+        }
+        
+        .header-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                var(--matte-blue) 20%, 
+                var(--matte-purple) 50%, 
+                var(--matte-green) 80%, 
+                transparent 100%);
+            z-index: 1;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px auto;
+            padding: 15px;
+            max-width: 900px;
+            background: rgba(21, 21, 31, 0.7);
+            border: 1px solid rgba(57, 134, 156, 0.2);
+            border-radius: 5px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 2px;
+            margin-right: 8px;
+        }
+        
+        .diagram-container {
+            overflow: auto;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 1200px;
+            background: rgba(21, 21, 31, 0.7);
+            border: 1px solid rgba(57, 134, 156, 0.2);
+            border-radius: 5px;
+            position: relative;
+        }
+        
+        .node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .node:hover .node-bg {
+            filter: brightness(1.2);
+        }
+        
+        .node:hover .node-text {
+            fill: #ffffff;
+        }
+        
+        .node-beginner .node-bg {
+            fill: url(#gradient-beginner);
+            stroke: var(--matte-green);
+            stroke-width: 1.5;
+        }
+        
+        .node-intermediate .node-bg {
+            fill: url(#gradient-intermediate);
+            stroke: var(--matte-blue);
+            stroke-width: 1.5;
+        }
+        
+        .node-advanced .node-bg {
+            fill: url(#gradient-advanced);
+            stroke: var(--matte-pink);
+            stroke-width: 1.5;
+        }
+        
+        .node-specialty .node-bg {
+            fill: url(#gradient-specialty);
+            stroke: var(--matte-purple);
+            stroke-width: 1.5;
+        }
+        
+        .node-certification .node-bg {
+            fill: url(#gradient-certification);
+            stroke: var(--matte-yellow);
+            stroke-width: 1.5;
+        }
+        
+        .node-text {
+            fill: #d8d8e0;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .link-path {
+            stroke-dasharray: 5, 5;
+            animation: dash 40s linear infinite;
+        }
+        
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -1000;
+            }
+        }
+        
+        .link-path-beginner {
+            stroke: var(--matte-green);
+            stroke-width: 1.5;
+        }
+        
+        .link-path-intermediate {
+            stroke: var(--matte-blue);
+            stroke-width: 1.5;
+        }
+        
+        .link-path-advanced {
+            stroke: var(--matte-pink);
+            stroke-width: 1.5;
+        }
+        
+        .link-path-specialty {
+            stroke: var(--matte-purple);
+            stroke-width: 1.5;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: rgba(13, 13, 21, 0.9);
+            color: #d8d8e0;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            max-width: 300px;
+            z-index: 100;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+            border: 1px solid var(--matte-blue);
+            backdrop-filter: blur(5px);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            .legend {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="header-container">
+        <h1>Roadmap de Ciberseguridad</h1>
+    </div>
+    
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--matte-green);"></div>
+            <span>Nivel Principiante</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--matte-blue);"></div>
+            <span>Nivel Intermedio</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--matte-pink);"></div>
+            <span>Nivel Avanzado</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--matte-purple);"></div>
+            <span>Especialidad</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: var(--matte-yellow);"></div>
+            <span>Certificación</span>
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <svg width="1200" height="1800" viewBox="0 0 1200 1800">
+            <!-- Definición de gradientes -->
+            <defs>
+                <linearGradient id="gradient-beginner" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#1c382a;"/>
+                    <stop offset="100%" style="stop-color:#2a5440;"/>
+                </linearGradient>
+                
+                <linearGradient id="gradient-intermediate" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#1a3842;"/>
+                    <stop offset="100%" style="stop-color:#275765;"/>
+                </linearGradient>
+                
+                <linearGradient id="gradient-advanced" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#3d1f2b;"/>
+                    <stop offset="100%" style="stop-color:#5a2d3f;"/>
+                </linearGradient>
+                
+                <linearGradient id="gradient-specialty" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#2a1f3d;"/>
+                    <stop offset="100%" style="stop-color:#422d63;"/>
+                </linearGradient>
+                
+                <linearGradient id="gradient-certification" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#3d361f;"/>
+                    <stop offset="100%" style="stop-color:#5a512d;"/>
+                </linearGradient>
+                
+                <!-- Definición de marcadores para flechas -->
+                <marker id="arrowhead-beginner" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="var(--neon-green)" />
+                </marker>
+                
+                <marker id="arrowhead-intermediate" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="var(--neon-blue)" />
+                </marker>
+                
+                <marker id="arrowhead-advanced" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="var(--neon-pink)" />
+                </marker>
+                
+                <marker id="arrowhead-specialty" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="var(--neon-purple)" />
+                </marker>
+            </defs>
+            
+            <!-- NIVEL PRINCIPIANTE -->
+            <!-- Nodo principal: Fundamentos de Ciberseguridad -->
+            <g class="node node-beginner" data-info="Comprende los conceptos básicos de la seguridad informática. Recursos: Curso Introduction to Cybersecurity (Cisco), Cybrary, Khan Academy.">
+                <rect x="500" y="50" width="200" height="60" rx="10" class="node-bg" />
+                <text x="600" y="85" text-anchor="middle" class="node-text">Fundamentos de Ciberseguridad</text>
+            </g>
+            
+            <!-- Enlaces desde Fundamentos -->
+            <path d="M600,110 L600,170" class="link-path link-path-beginner" marker-end="url(#arrowhead-beginner)" />
+            <path d="M600,110 L400,170" class="link-path link-path-beginner" marker-end="url(#arrowhead-beginner)" />
+            <path d="M600,110 L800,170" class="link-path link-path-beginner" marker-end="url(#arrowhead-beginner)" />
+            
+            <!-- Redes Básicas -->
+            <g class="node node-beginner" data-info="Conceptos de redes, protocolos y modelos TCP/IP y OSI. Recursos: CompTIA Network+, Cisco CCNA intro, YouTube 'Practical Networking'.">
+                <rect x="300" y="170" width="200" height="60" rx="10" class="node-bg" />
+                <text x="400" y="205" text-anchor="middle" class="node-text">Redes Básicas</text>
+            </g>
+            
+            <!-- Sistemas Operativos -->
+            <g class="node node-beginner" data-info="Conocimiento de Windows, Linux, permisos y gestión de usuarios. Recursos: Linux Journey, TryHackMe (rutas de Linux y Windows).">
+                <rect x="500" y="170" width="200" height="60" rx="10" class="node-bg" />
+                <text x="600" y="205" text-anchor="middle" class="node-text">Sistemas Operativos</text>
+            </g>
+            
+            <!-- Seguridad Personal -->
+            <g class="node node-beginner" data-info="Higiene digital, gestión de contraseñas, conceptos de privacidad. Recursos: EFF's Surveillance Self-Defense, Tactical Tech.">
+                <rect x="700" y="170" width="200" height="60" rx="10" class="node-bg" />
+                <text x="800" y="205" text-anchor="middle" class="node-text">Seguridad Personal</text>
+            </g>
+            
+            <!-- Enlaces nivel principiante a intermedio -->
+            <path d="M400,230 L400,290" class="link-path link-path-intermediate" marker-end="url(#arrowhead-intermediate)" />
+            <path d="M600,230 L500,290" class="link-path link-path-intermediate" marker-end="url(#arrowhead-intermediate)" />
+            <path d="M600,230 L700,290" class="link-path link-path-intermediate" marker-end="url(#arrowhead-intermediate)" />
+            <path d="M800,230 L800,290" class="link-path link-path-intermediate" marker-end="url(#arrowhead-intermediate)" />
+            
+            <!-- NIVEL INTERMEDIO -->
+            <!-- Seguridad en Redes -->
+            <g class="node node-intermediate" data-info="Firewalls, IDS/IPS, VPNs, análisis de tráfico. Recursos: Wireshark, pfSense, Snort, TryHackMe Network Security.">
+                <rect x="300" y="290" width="200" height="60" rx="10" class="node-bg" />
+                <text x="400" y="325" text-anchor="middle" class="node-text">Seguridad en Redes</text>
+            </g>
+            
+            <!-- Seguridad en Sistemas -->
+            <g class="node node-intermediate" data-info="Hardening de sistemas, gestión de parches, controles de seguridad. Recursos: CIS Benchmarks, NIST guidelines, TryHackMe.">
+                <rect x="500" y="290" width="200" height="60" rx="10" class="node-bg" />
+                <text x="600" y="325" text-anchor="middle" class="node-text">Seguridad en Sistemas</text>
+            </g>
+            
+            <!-- Criptografía -->
+            <g class="node node-intermediate" data-info="Algoritmos, cifrado, hashing, PKI, SSL/TLS. Recursos: Cryptography I (Coursera), Crypto101.">
+                <rect x="700" y="290" width="200" height="60" rx="10" class="node-bg" />
+                <text x="800" y="325" text-anchor="middle" class="node-text">Criptografía</text>
+            </g>
+            
+            <!-- Enlaces a Cert Intermedia -->
+            <path d="M400,350 L400,410" class="link-path link-path-intermediate" marker-end="url(#arrowhead-intermediate)" />
+            <path d="M600,350 L400,410" class="link-path link-path-intermediate" marker-end="url(#arrowhead-intermediate)" />
+            <path d="M800,350 L400,410" class="link-path link-path-intermediate" marker-end="url(#arrowhead-intermediate)" />
+            
+            <!-- Certificación Intermedia -->
+            <g class="node node-certification" data-info="CompTIA Security+: Certificación básica que cubre los fundamentos de seguridad. CEH (Certified Ethical Hacker): Enfocada en técnicas de hacking ético.">
+                <rect x="300" y="410" width="200" height="60" rx="10" class="node-bg" />
+                <text x="400" y="445" text-anchor="middle" class="node-text">Certificaciones: Security+, CEH</text>
+            </g>
+            
+            <!-- Enlaces desde nivel intermedio a especializaciones -->
+            <path d="M400,350 L200,490" class="link-path link-path-specialty" marker-end="url(#arrowhead-specialty)" />
+            <path d="M400,350 L400,490" class="link-path link-path-specialty" marker-end="url(#arrowhead-specialty)" />
+            <path d="M600,350 L600,490" class="link-path link-path-specialty" marker-end="url(#arrowhead-specialty)" />
+            <path d="M800,350 L800,490" class="link-path link-path-specialty" marker-end="url(#arrowhead-specialty)" />
+            <path d="M800,350 L1000,490" class="link-path link-path-specialty" marker-end="url(#arrowhead-specialty)" />
+            
+            <!-- ESPECIALIZACIONES (Caminos de especialización) -->
+            
+            <!-- Especialización 1: Pentesting -->
+            <g class="node node-specialty" data-info="Evaluación de vulnerabilidades, explotación, OWASP Top 10, metodologías. Recursos: OWASP, HackTheBox, TryHackMe, Portswigger Web Academy.">
+                <rect x="100" y="490" width="200" height="60" rx="10" class="node-bg" />
+                <text x="200" y="525" text-anchor="middle" class="node-text">Pentesting</text>
+            </g>
+            
+            <!-- Especialización 2: Análisis de Malware -->
+            <g class="node node-specialty" data-info="Reversing, análisis estático/dinámico, técnicas anti-reversing. Recursos: Practical Malware Analysis, ANY.RUN, REMnux.">
+                <rect x="300" y="490" width="200" height="60" rx="10" class="node-bg" />
+                <text x="400" y="525" text-anchor="middle" class="node-text">Análisis de Malware</text>
+            </g>
+            
+            <!-- Especialización 3: Seguridad en Aplicaciones -->
+            <g class="node node-specialty" data-info="SAST/DAST, DevSecOps, seguridad en el SDLC. Recursos: OWASP SAMM, GitHub Security Lab, JuiceShop.">
+                <rect x="500" y="490" width="200" height="60" rx="10" class="node-bg" />
+                <text x="600" y="525" text-anchor="middle" class="node-text">Seguridad en Aplicaciones</text>
+            </g>
+            
+            <!-- Especialización 4: Forense Digital -->
+            <g class="node node-specialty" data-info="Adquisición de evidencia, análisis de artefactos, cadena de custodia. Recursos: SANS FOR508, Autopsy, Volatility.">
+                <rect x="700" y="490" width="200" height="60" rx="10" class="node-bg" />
+                <text x="800" y="525" text-anchor="middle" class="node-text">Forense Digital</text>
+            </g>
+            
+            <!-- Especialización 5: Seguridad en la Nube -->
+            <g class="node node-specialty" data-info="Modelos de servicio, configuración segura, AWS/Azure/GCP. Recursos: AWS Security Specialty, Cloud Security Alliance, flAWS.">
+                <rect x="900" y="490" width="200" height="60" rx="10" class="node-bg" />
+                <text x="1000" y="525" text-anchor="middle" class="node-text">Seguridad en la Nube</text>
+            </g>
+            
+            <!-- Enlaces desde especializaciones a herramientas específicas -->
+            <path d="M200,550 L200,620" class="link-path link-path-specialty" marker-end="url(#arrowhead-specialty)" />
+            <path d="M400,550 L400,620" class="link-path link-path-specialty" marker-end="url(#arrowhead-specialty)" />
+            <path d="M600,550 L600,620" class="link-path link-path-specialty" marker-end="url(#arrowhead-specialty)" />
+            <path d="M800,550 L800,620" class="link-path link-path-specialty" marker-end="url(#arrowhead-specialty)" />
+            <path d="M1000,550 L1000,620" class="link-path link-path-specialty" marker-end="url(#arrowhead-specialty)" />
+            
+            <!-- HERRAMIENTAS POR ESPECIALIZACIÓN -->
+            
+            <!-- Herramientas Pentesting -->
+            <g class="node node-intermediate" data-info="Herramientas esenciales: Kali Linux, Metasploit, Burp Suite, Nmap, Nessus, SQLMap, etc.">
+                <rect x="100" y="620" width="200" height="60" rx="10" class="node-bg" />
+                <text x="200" y="655" text-anchor="middle" class="node-text">Herramientas de Pentesting</text>
+            </g>
+            
+            <!-- Herramientas Malware -->
+            <g class="node node-intermediate" data-info="Herramientas: IDA Pro, Ghidra, OllyDbg, x64dbg, PEStudio, Cuckoo Sandbox, etc.">
+                <rect x="300" y="620" width="200" height="60" rx="10" class="node-bg" />
+                <text x="400" y="655" text-anchor="middle" class="node-text">Herramientas de Análisis</text>
+            </g>
+            
+            <!-- Herramientas AppSec -->
+            <g class="node node-intermediate" data-info="Herramientas: OWASP ZAP, SonarQube, Snyk, Dependency-Check, ThreadFix, etc.">
+                <rect x="500" y="620" width="200" height="60" rx="10" class="node-bg" />
+                <text x="600" y="655" text-anchor="middle" class="node-text">Herramientas AppSec</text>
+            </g>
+            
+            <!-- Herramientas Forense -->
+            <g class="node node-intermediate" data-info="Herramientas: FTK, EnCase, Autopsy, Volatility, SIFT Workstation, etc.">
+                <rect x="700" y="620" width="200" height="60" rx="10" class="node-bg" />
+                <text x="800" y="655" text-anchor="middle" class="node-text">Herramientas Forenses</text>
+            </g>
+            
+            <!-- Herramientas Cloud -->
+            <g class="node node-intermediate" data-info="Herramientas: CloudSploit, ScoutSuite, CloudMapper, AquaSec, tfsec, etc.">
+                <rect x="900" y="620" width="200" height="60" rx="10" class="node-bg" />
+                <text x="1000" y="655" text-anchor="middle" class="node-text">Herramientas Cloud Security</text>
+            </g>
+            
+            <!-- Enlaces a nivel avanzado -->
+            <path d="M200,680 L300,750" class="link-path link-path-advanced" marker-end="url(#arrowhead-advanced)" />
+            <path d="M400,680 L300,750" class="link-path link-path-advanced" marker-end="url(#arrowhead-advanced)" />
+            <path d="M600,680 L900,750" class="link-path link-path-advanced" marker-end="url(#arrowhead-advanced)" />
+            <path d="M800,680 L900,750" class="link-path link-path-advanced" marker-end="url(#arrowhead-advanced)" />
+            <path d="M1000,680 L900,750" class="link-path link-path-advanced" marker-end="url(#arrowhead-advanced)" />
+            
+            <!-- NIVEL AVANZADO - DEFENSIVO -->
+            <g class="node node-advanced" data-info="Diseño de arquitecturas seguras, Threat Modeling, análisis de riesgos avanzado. Recursos: NIST, MITRE ATT&CK, SABSA, Zero Trust.">
+                <rect x="200" y="750" width="200" height="60" rx="10" class="node-bg" />
+                <text x="300" y="785" text-anchor="middle" class="node-text">Seguridad Defensiva</text>
+            </g>
+            
+            <!-- NIVEL AVANZADO - OFENSIVO -->
+            <g class="node node-advanced" data-info="Red teaming, explotación avanzada, ataques persistentes, técnicas de evasión. Recursos: Red Team Labs, Advanced Adversary Tactics.">
+                <rect x="800" y="750" width="200" height="60" rx="10" class="node-bg" />
+                <text x="900" y="785" text-anchor="middle" class="node-text">Seguridad Ofensiva</text>
+            </g>
+            
+            <!-- Enlaces desde avanzado a roles específicos -->
+            <path d="M300,810 L200,880" class="link-path link-path-advanced" marker-end="url(#arrowhead-advanced)" />
+            <path d="M300,810 L400,880" class="link-path link-path-advanced" marker-end="url(#arrowhead-advanced)" />
+            <path d="M900,810 L800,880" class="link-path link-path-advanced" marker-end="url(#arrowhead-advanced)" />
+            <path d="M900,810 L1000,880" class="link-path link-path-advanced" marker-end="url(#arrowhead-advanced)" />
+            
+            <!-- ROLES - DEFENSIVO -->
+            <g class="node node-specialty" data-info="Detección y respuesta a incidentes, SIEM, SOAR, threat hunting. Recursos: SANS FOR508, Splunk, Elastic Stack.">
+                <rect x="100" y="880" width="200" height="60" rx="10" class="node-bg" />
+                <text x="200" y="915" text-anchor="middle" class="node-text">SOC Analyst</text>
+            </g>
+            
+            <g class="node node-specialty" data-info="Estrategia de seguridad, políticas, cumplimiento normativo, gestión de riesgos. Recursos: ISO 27001, NIST CSF, COBIT.">
+                <rect x="300" y="880" width="200" height="60" rx="10" class="node-bg" />
+                <text x="400" y="915" text-anchor="middle" class="node-text">Security Manager</text>
+            </g>
+            
+            <!-- ROLES - OFENSIVO -->
+            <g class="node node-specialty" data-info="Evaluación de seguridad avanzada, simulación de ataques dirigidos. Recursos: SANS SEC660, OSEP de Offensive Security.">
+                <rect x="700" y="880" width="200" height="60" rx="10" class="node-bg" />
+                <text x="800" y="915" text-anchor="middle" class="node-text">Red Team Operator</text>
+            </g>
+            
+            <g class="node node-specialty" data-info="Descubrimiento de vulnerabilidades, investigación de seguridad, desarrollo de exploits. Recursos: The Art of Software Security Assessment, Bug Bounty platforms.">
+                <rect x="900" y="880" width="200" height="60" rx="10" class="node-bg" />
+                <text x="1000" y="915" text-anchor="middle" class="node-text">Security Researcher</text>
+            </g>
+            
+            <!-- Enlaces a certificaciones avanzadas -->
+            <path d="M200,940 L400,1010" class="link-path link-path-advanced" marker-end="url(#arrowhead-advanced)" />
+            <path d="M400,940 L400,1010" class="link-path link-path-advanced" marker-end="url(#arrowhead-advanced)" />
+            <path d="M800,940 L800,1010" class="link-path link-path-advanced" marker-end="url(#arrowhead-advanced)" />
+            <path d="M1000,940 L800,1010" class="link-path link-path-advanced" marker-end="url(#arrowhead-advanced)" />
+            
+            <!-- CERTIFICACIONES AVANZADAS -->
+            <g class="node node-certification" data-info="CISSP: Certificación general de nivel senior. CISM: Enfocada en gestión de seguridad de la información. CRISC: Gestión de riesgos de TI.">
+                <rect x="300" y="1010" width="200" height="60" rx="10" class="node-bg" />
+                <text x="400" y="1045" text-anchor="middle" class="node-text">Cert: CISSP, CISM, CRISC</text>
+            </g>
+            
+            <g class="node node-certification" data-info="OSCP: Pentesting práctico. OSCE: Explotación avanzada. OSWE: Seguridad en aplicaciones web.">
+                <rect x="700" y="1010" width="200" height="60" rx="10" class="node-bg" />
+                <text x="800" y="1045" text-anchor="middle" class="node-text">Cert: OSCP, OSCE, OSWE</text>
+            </g>
+            
+            <!-- Enlaces a especializaciones adicionales -->
+            <path d="M400,1070 L400,1140" class="link-path link-path-advanced" marker-end="url(#arrowhead-advanced)" />
+            <path d="M800,1070 L800,1140" class="link-path link-path-advanced" marker-end="url(#arrowhead-advanced)" />
+            
+            <!-- ESPECIALIZACIONES ADICIONALES -->
+            <g class="node node-advanced" data-info="OT/ICS, IoT, SCADA, seguridad en entornos industriales. Recursos: ICS-CERT, SANS ICS410, S4 Conference.">
+                <rect x="300" y="1140" width="200" height="60" rx="10" class="node-bg" />
+                <text x="400" y="1175" text-anchor="middle" class="node-text">Seguridad Industrial</text>
+            </g>
+            
+            <g class="node node-advanced" data-info="CTI, análisis de APTs, atribución, actores de amenazas. Recursos: MITRE ATT&CK, Mandiant, CrowdStrike reports.">
+                <rect x="700" y="1140" width="200" height="60" rx="10" class="node-bg" />
+                <text x="800" y="1175" text-anchor="middle" class="node-text">Threat Intelligence</text>
+            </g>
+            
+            <!-- LABORATORIOS PRÁCTICOS - En la parte inferior para mostrar relevancia continua -->
+            <g class="node node-intermediate" data-info="TryHackMe: Plataforma con rutas de aprendizaje para todos los niveles. HackTheBox: Entorno más desafiante para practicar habilidades.">
+                <rect x="200" y="1300" width="200" height="60" rx="10" class="node-bg" />
+                <text x="300" y="1335" text-anchor="middle" class="node-text">Laboratorios: TryHackMe</text>
+            </g>
+            
+            <g class="node node-intermediate" data-info="HackTheBox: Entorno de hacking práctico más avanzado. VulnHub: Máquinas vulnerables para prácticas locales.">
+                <rect x="500" y="1300" width="200" height="60" rx="10" class="node-bg" />
+                <text x="600" y="1335" text-anchor="middle" class="node-text">Laboratorios: HackTheBox</text>
+            </g>
+            
+            <g class="node node-intermediate" data-info="Instalación local de entornos vulnerables como Metasploitable, DVWA, OWASP Juice Shop, etc.">
+                <rect x="800" y="1300" width="200" height="60" rx="10" class="node-bg" />
+                <text x="900" y="1335" text-anchor="middle" class="node-text">Entornos Vulnerables</text>
+            </g>
+            
+            <!-- RECURSOS CONTINUOS - Elementos de aprendizaje continuo -->
+            <g class="node node-beginner" data-info="CTFs, Bug Bounty, investigación, conferencias, comunidades de seguridad, podcasts, blogs.">
+                <rect x="350" y="1450" width="500" height="60" rx="10" class="node-bg" />
+                <text x="600" y="1485" text-anchor="middle" class="node-text">APRENDIZAJE CONTINUO: CTFs, Investigación, Comunidades</text>
+            </g>
+            
+            <!-- Efecto de circuito/código sutil -->
+            <path d="M50,200 L150,200 L150,300 L250,300 L250,400" stroke="var(--matte-blue)" stroke-width="1" fill="none" opacity="0.15"/>
+            <path d="M1150,200 L1050,200 L1050,300 L950,300 L950,400" stroke="var(--matte-green)" stroke-width="1" fill="none" opacity="0.15"/>
+            <path d="M50,900 L150,900 L150,1000 L250,1000" stroke="var(--matte-pink)" stroke-width="1" fill="none" opacity="0.15"/>
+            <path d="M1150,900 L1050,900 L1050,1000 L950,1000" stroke="var(--matte-purple)" stroke-width="1" fill="none" opacity="0.15"/>
+        </svg>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Funcionalidad para mostrar información al pasar el mouse
+        const nodes = document.querySelectorAll('.node');
+        const tooltip = document.getElementById('tooltip');
+        
+        nodes.forEach(node => {
+            node.addEventListener('mouseover', function(e) {
+                const info = this.getAttribute('data-info');
+                tooltip.textContent = info;
+                tooltip.style.visibility = 'visible';
+                tooltip.style.opacity = '1';
+                
+                // Posicionar el tooltip cerca del nodo
+                const rect = this.getBoundingClientRect();
+                tooltip.style.left = (rect.left + window.scrollX + rect.width/2) + 'px';
+                tooltip.style.top = (rect.top + window.scrollY - tooltip.offsetHeight - 10) + 'px';
+                
+                // Ajustar si está fuera de los límites
+                const tooltipRect = tooltip.getBoundingClientRect();
+                if (tooltipRect.left < 0) {
+                    tooltip.style.left = '10px';
+                } else if (tooltipRect.right > window.innerWidth) {
+                    tooltip.style.left = (window.innerWidth - tooltipRect.width - 10) + 'px';
+                }
+                
+                if (tooltipRect.top < 0) {
+                    tooltip.style.top = (rect.bottom + window.scrollY + 10) + 'px';
+                }
+            });
+            
+            node.addEventListener('mouseout', function() {
+                tooltip.style.visibility = 'hidden';
+                tooltip.style.opacity = '0';
+            });
+        });
+        
+        // Se eliminó el efecto de parpadeo para un acabado mate
+    </script>
+</body>
+</html>
